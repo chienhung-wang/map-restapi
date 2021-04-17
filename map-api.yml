@@ -1,0 +1,495 @@
+openapi: 3.0.1
+info:
+  title: ESN-SA2-iter4-Map (Chien-Hung Wang)
+  description: >-
+    This is a API documents for ESN application - iteration 4 map (Chien-Hung Wang)
+  # termsOfService:
+  # contact:
+  # license:
+  version: 1.0.0-oas3
+# externalDocs:
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/cmusv-fse-s21-sa2/ESN-SA2/1.0.0-oas3
+  - url: https://s21esn-sa2.herokuapp.com/
+    description: Heroku server
+tags:
+  - name: map
+    description: Operations about map
+    # externalDocs:
+    #   description: Find out more about our store
+    #   url: 'http://swagger.io'
+    
+security:
+  - cookieAuth: []
+    
+paths:
+  /map/areas:
+    get:
+      tags:
+        - map
+      summary: Retrieve all previously marked dangerous areas
+      description: Retrieve all previously marked dangerous areas
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    enum:
+                      - 0
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Area'
+                      
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+                      
+  
+  /map/area/{username}:
+    post:
+      tags:
+        - map
+      summary: A new dangerous area marked
+      description: A new dangerous area marked
+      parameters:
+        - name: username
+          in: path
+          description: The user who marked the area
+          required: true
+          explode: true
+          schema:
+            type: string
+      requestBody:
+        description: Retrieved from user input
+        content:
+          application/json:
+              schema:
+                type: object
+                properties:
+                  level:
+                    type: string
+                  note:
+                    type: string
+                  coords:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lat: 
+                          type: string
+                        lng:
+                          type: string
+      
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    enum:
+                      - 0
+                  message:
+                    type: string
+        
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          
+    
+    put:
+      tags:
+        - map
+      summary: A dangerous area updated
+      description: A dangerous area updated
+      parameters:
+        - name: username
+          in: path
+          description: The user who updated the area
+          required: true
+          explode: true
+          schema:
+            type: string
+      requestBody:
+        description: Retrieved from user input
+        content:
+          application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  level:
+                    type: string
+                  note:
+                    type: string
+      
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    enum:
+                      - 0
+                  message:
+                    type: string
+        
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+        '404':
+          description: Marked area not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    enum:
+                      - -1
+                  message:
+                    type: string
+          
+          
+  
+                    
+        
+      
+                      
+                
+               
+  
+  
+                        
+                    
+      
+
+
+
+  
+
+  # /users/search:
+  #   get:
+  #     tags:
+  #       - searching
+  #     summary: Search citizens
+  #     description: Get a list of all citizens matching the criterion
+  #     parameters:
+  #       - name: username
+  #         in: query
+  #         description: Username (or part of)
+  #         explode: true
+  #         schema:
+  #           type: string
+  #       - name: status
+  #         in: query
+  #         description: status name
+  #         explode: true
+  #         schema:
+  #           $ref: '#/components/schemas/Status'
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   code:
+  #                     type: integer
+  #                     enum:
+  #                       - 0
+  #                   message:
+  #                     type: string
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       $ref: '#/components/schemas/User'
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  
+  # /citizens/{status}:
+  #   get:
+  #     tags:
+  #       - search
+  #     summary: Search with status name
+  #     description: Get a list of all citizens with this status
+  #     parameters:
+  #       - name: status
+  #         in: path
+  #         description: status name
+  #         required: true
+  #         explode: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   code:
+  #                     type: integer
+  #                     enum:
+  #                       - 0
+  #                   message:
+  #                     type: string
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       $ref: '#/components/schemas/User'
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  #       '404':
+  #         description: No user was found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 code:
+  #                   type: integer
+  #                   enum:
+  #                     - -1
+  #                 message:
+  #                   type: string
+  
+  # /announcements/search:
+  #   get:
+  #     tags:
+  #       - searching
+  #     summary: Search the announcements containing the words
+  #     description: Get latest announcements including these words
+  #     parameters:
+  #       - name: words
+  #         in: query
+  #         description: Words for querying the announcemnts
+  #         required: true
+  #         explode: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   code:
+  #                     type: integer
+  #                     enum:
+  #                       - 0
+  #                   message:
+  #                     type: string
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       $ref: '#/components/schemas/Announcement'
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  #       '404':
+  #         description: No announcement was found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 code:
+  #                   type: integer
+  #                   enum:
+  #                     - -1
+  #                 message:
+  #                   type: string
+    
+  # /messages/public/search:
+  #   get:
+  #     tags:
+  #       - searching
+  #     summary: Search the public messages containing the words
+  #     description: Get latest public messages including these words
+  #     parameters:
+  #       - name: words
+  #         in: query
+  #         description: Words for querying the public messages
+  #         required: true
+  #         explode: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   code:
+  #                     type: integer
+  #                     enum:
+  #                       - 0
+  #                   message:
+  #                     type: string
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       $ref: '#/components/schemas/Message'
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  
+  # /messages/private/search:
+  #   get:
+  #     tags:
+  #       - searching
+  #     summary: Search the private messages containing the words
+  #     description: Get latest private messages including these words
+  #     parameters:
+  #       - name: words
+  #         in: query
+  #         description: Words for querying the private messages
+  #         required: true
+  #         explode: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   code:
+  #                     type: integer
+  #                     enum:
+  #                       - 0
+  #                   message:
+  #                     type: string
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       $ref: '#/components/schemas/Message'
+  #       '401':
+  #         $ref: '#/components/responses/UnauthorizedError'
+  
+components:
+  schemas:
+    Area:
+      type: object
+      properties:
+        _id:
+          type: string
+        markBy:
+          type: string
+        updateBy:
+          type: string
+        level:
+          type: string
+        note:
+          type: string
+        coords:
+          type: array
+          items:
+            type: object
+            properties:
+              lat: 
+                type: string
+              lng:
+                type: string
+
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        onlineStatus:
+          type: string
+          enum:
+            - online
+            - offline
+        status:
+          $ref: '#/components/schemas/Status'
+            
+    Message:
+      type: object
+      properties:
+        content:
+          type: string
+        author:
+          type: string
+        target:
+          type: string
+        timestamp:
+          type: string
+        read:
+          type: boolean
+          
+    Announcement:
+      type: object
+      properties:
+        content:
+          type: string
+        author:
+          type: string
+        timestamp:
+          type: string
+        # read:
+        #   type: boolean
+    
+    Status:
+      type: string
+      enum:
+        - ok
+        - help
+        - emergency
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                enum:
+                  - -1
+              message:
+                type: string
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
+    # petstore_auth:
+    #   type: oauth2
+    #   flows:
+    #     implicit:
+    #       authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+    #       scopes:
+    #         'write:pets': modify pets in your account
+    #         'read:pets': read your pets
+    # api_key:
+    #   type: apiKey
+    #   name: api_key
+    #   in: header
